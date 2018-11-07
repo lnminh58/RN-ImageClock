@@ -1,5 +1,5 @@
 # RN-ImageClock
 A analog clock example with pure javascript.
 
- <img width=540 scr="demo/demo.png"/>
+ <img src="demo/demo.png" width=540 >
 

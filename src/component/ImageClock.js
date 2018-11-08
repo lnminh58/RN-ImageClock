@@ -10,29 +10,22 @@ const defaultSecondHand = require('../../assets/img/second-hand.png');
 export default class ImageClock extends PureComponent {
   constructor(props) {
     super(props);
-    const currentTime = new Date();
-    this.state = {
-      sec: (currentTime.getSeconds() * 6),
-      min: (currentTime.getMinutes() + (currentTime.getSeconds() / 60)) * 6,
-      hour:
-        ((currentTime.getHours() % 12) + (currentTime.getMinutes() / 60)
-        + (currentTime.getSeconds() / 3600)) * 30
-    };
+    this.state = this.convertDateToDeg(new Date())
   }
 
   componentDidMount() {
     if (this.props.showRealTime) {
       this.timer = setInterval(() => {
-        this.convertDateToDeg(new Date());
+        this.setState(this.convertDateToDeg(new Date()));
       }, this.props.updateTime);
     } else {
-      this.convertDateToDeg(this.props.initialDate);
+      this.setState(this.convertDateToDeg(this.props.initialDate));
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.initialDate !== this.props.initialDate) {
-      this.convertDateToDeg(this.props.initialDate);
+      this.setState(this.convertDateToDeg(this.props.initialDate));
     }
   }
 
@@ -42,16 +35,14 @@ export default class ImageClock extends PureComponent {
     }
   }
 
-  convertDateToDeg = (d) => {
-    this.setState({
+  convertDateToDeg = (d) => ({
       sec: this.props.smoothRotate
         ? (d.getSeconds() + (d.getMilliseconds() / 1000)) * 6
         : (d.getSeconds() * 6),
       min: (d.getMinutes() + (d.getSeconds() / 60)) * 6,
       hour:
         ((d.getHours() % 12) + (d.getMinutes() / 60) + (d.getSeconds() / 3600)) * 30
-    });
-  };
+  })
 
   clockFrame() {
     return {
